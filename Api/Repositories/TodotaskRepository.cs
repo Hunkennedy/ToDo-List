@@ -15,7 +15,13 @@ namespace Api.Repositories
         public async Task<List<TodotaskDto>> Get()
         {
             var todo = await _context.Todotasks.ToListAsync();
-            var dto = todo.Select(x => new TodotaskDto() { Id = x.Id, Title = x.Title }).ToList();
+            var dto = todo.Select(x => new TodotaskDto() 
+            { 
+                Id = x.Id, 
+                Title = x.Title, 
+                FolderId = x.FolderId, 
+                Check = x.Check 
+            }).ToList();
             return dto;
         }
 
@@ -26,17 +32,20 @@ namespace Api.Repositories
             var dto = new TodotaskDto()
             {
                 Id = todo.Id,
-                Title = todo.Title
+                Title = todo.Title,
+                FolderId = todo.FolderId,
+                Check = todo.Check
             };
             return dto;
         }
-
 
         public async Task<TodotaskDto> Post(CreateTodotaskDto taskDto)
         {
             var task = new Todotask()
             {
-                Title = taskDto.Title
+                Title = taskDto.Title,
+                FolderId=taskDto.FolderId,
+                Check = false
             };
 
             await _context.Todotasks.AddAsync(task);
@@ -44,7 +53,9 @@ namespace Api.Repositories
             var dto = new TodotaskDto()
             {
                 Id = task.Id,
-                Title = task.Title
+                Title = task.Title,
+                Check = task.Check,
+                FolderId = task.FolderId
             };
             return dto;
         }
@@ -54,15 +65,19 @@ namespace Api.Repositories
             var myTask = await _context.Todotasks.FirstOrDefaultAsync(x => x.Id == id);
             if (myTask == null) return null;
             myTask.Title = taskDto.Title;
+            myTask.Check = taskDto.Check;
             _context.Entry(myTask).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             var dto = new TodotaskDto
             {
                 Id = myTask.Id,
-                Title= myTask.Title
+                Title= myTask.Title,
+                FolderId = myTask.FolderId,
+                Check = myTask.Check
             };
             return dto;
         }
+
         public async Task<TodotaskDto?> Delete(int id)
         {
             var myTask = await _context.Todotasks.FirstOrDefaultAsync(x => x.Id == id);
