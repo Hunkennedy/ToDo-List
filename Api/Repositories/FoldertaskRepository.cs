@@ -20,7 +20,10 @@ namespace Api.Repositories
             var tasks = await _context.Todotasks.ToListAsync();
             var tasksDto = tasks.Select(task => new TodotaskDto 
             { 
-                Id = task.Id, Check = task.Check, Title = task.Title , FolderId = task.FolderId
+                Id = task.Id,
+                Check = task.Check, 
+                Title = task.Title , 
+                FolderId = task.FolderId
             }).ToList();
             var dto = fold.Select(x => new FoldertaskDto
             {
