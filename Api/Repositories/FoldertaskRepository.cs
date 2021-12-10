@@ -25,17 +25,20 @@ namespace Api.Repositories
                 Check = task.Check, 
                 Title = task.Title
             }).ToList();
-
-
-
             var dto = fold.Select(x => new FoldertaskDto
             {
                 Id = x.Id,
                 Name = x.Name,
                 Todotasks = from n in tasks 
                             where n.FolderId == x.Id 
-                            select new TodotaskDto { Id = n.Id, Title = n.Title, Check = n.Check }
-            }).ToList();
+                            select new TodotaskDto 
+                            { 
+                                Id = n.Id, 
+                                Title = n.Title, 
+                                Check = n.Check 
+                            }
+            })
+            .ToList();
             
             return dto;
         }
@@ -50,7 +53,8 @@ namespace Api.Repositories
                 Id = task.Id,
                 Check = task.Check,
                 Title = task.Title
-            }).ToList();
+            })
+            .ToList();
             var dto = new FoldertaskDto
             {
                 Id = fold.Id,
@@ -74,7 +78,6 @@ namespace Api.Repositories
             {
                 Id = fold.Id,
                 Name = taskDto.Name
-
             };
             return dto;
         }
@@ -96,11 +99,9 @@ namespace Api.Repositories
             {
                 _context.Entry(item).State = EntityState.Deleted;
             }
-            
             var folder = await _context.Foldertasks.FirstOrDefaultAsync(x => x.Id == id);
             if (folder == null) return null;
             _context.Entry(folder).State = EntityState.Deleted;
-
             await _context.SaveChangesAsync();
             var dto = new FoldertaskDto();
             return dto;
