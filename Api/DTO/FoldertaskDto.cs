@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public List<TodotaskDto>? Todotasks { get; set; }
+        public IEnumerable<TodotaskDto?>? Todotasks { get; set; }
 
     }
 }

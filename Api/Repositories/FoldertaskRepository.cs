@@ -3,6 +3,7 @@ using Api.DTO;
 using Api.Interfaces;
 using Api.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Api.Repositories
 {
@@ -20,14 +21,22 @@ namespace Api.Repositories
             var tasks = await _context.Todotasks.ToListAsync();
             var tasksDto = tasks.Select(task => new TodotaskDto 
             { 
-                Id = task.Id, Check = task.Check, Title = task.Title , FolderId = task.FolderId
+                Id = task.Id, 
+                Check = task.Check, 
+                Title = task.Title
             }).ToList();
+
+
+
             var dto = fold.Select(x => new FoldertaskDto
             {
                 Id = x.Id,
                 Name = x.Name,
-                Todotasks = tasksDto.Where(t => x.Id == t.FolderId ).ToList()
+                Todotasks = from n in tasks 
+                            where n.FolderId == x.Id 
+                            select new TodotaskDto { Id = n.Id, Title = n.Title, Check = n.Check }
             }).ToList();
+            
             return dto;
         }
 
@@ -40,14 +49,15 @@ namespace Api.Repositories
             {
                 Id = task.Id,
                 Check = task.Check,
-                Title = task.Title,
-                FolderId = task.FolderId
+                Title = task.Title
             }).ToList();
             var dto = new FoldertaskDto
             {
                 Id = fold.Id,
                 Name = fold.Name,
-                Todotasks = tasksDto.Where(x => fold.Id == x.FolderId).ToList()
+                Todotasks = from n in tasks
+                            where n.FolderId == fold.Id
+                            select new TodotaskDto { Id = n.Id, Title = n.Title, Check = n.Check }
             };
             return dto;
         }

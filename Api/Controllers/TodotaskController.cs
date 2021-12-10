@@ -39,7 +39,7 @@ namespace Api.Controllers
         }
 
         [HttpPut(Name = "UpdateTask")]
-        public async Task<ActionResult> UpdateTask(int id, CreateTodotaskDto task)
+        public async Task<ActionResult> UpdateTask(int id, TodotaskDto task)
         {
             var _task = await _todotask.Update(id, task);
             if (_task == null)

@@ -19,7 +19,6 @@ namespace Api.Repositories
             { 
                 Id = x.Id, 
                 Title = x.Title, 
-                FolderId = x.FolderId, 
                 Check = x.Check 
             }).ToList();
             return dto;
@@ -33,7 +32,6 @@ namespace Api.Repositories
             {
                 Id = todo.Id,
                 Title = todo.Title,
-                FolderId = todo.FolderId,
                 Check = todo.Check
             };
             return dto;
@@ -54,13 +52,12 @@ namespace Api.Repositories
             {
                 Id = task.Id,
                 Title = task.Title,
-                Check = task.Check,
-                FolderId = task.FolderId
+                Check = task.Check
             };
             return dto;
         }
 
-        public async Task<TodotaskDto?> Update(int id, CreateTodotaskDto taskDto)
+        public async Task<TodotaskDto?> Update(int id, TodotaskDto taskDto)
         {
             var myTask = await _context.Todotasks.FirstOrDefaultAsync(x => x.Id == id);
             if (myTask == null) return null;
@@ -72,7 +69,6 @@ namespace Api.Repositories
             {
                 Id = myTask.Id,
                 Title= myTask.Title,
-                FolderId = myTask.FolderId,
                 Check = myTask.Check
             };
             return dto;
