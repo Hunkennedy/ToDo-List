@@ -11,5 +11,7 @@ namespace Api.Data
         }
 
         public DbSet<Todotask> Todotasks { get; set; } = null!;
+        public DbSet<Foldertask> Foldertasks { get; set; } = null!;
+
     }
 }
