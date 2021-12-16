@@ -19,22 +19,18 @@ namespace Api.Repositories
         {
             var fold = await _context.Foldertasks.ToListAsync();
             var tasks = await _context.Todotasks.ToListAsync();
-            var tasksDto = tasks.Select(task => new TodotaskDto 
-            { 
-                Id = task.Id, 
-                Check = task.Check, 
-                Title = task.Title
-            }).ToList();
-
-
-
             var dto = fold.Select(x => new FoldertaskDto
             {
                 Id = x.Id,
                 Name = x.Name,
                 Todotasks = from n in tasks 
                             where n.FolderId == x.Id 
-                            select new TodotaskDto { Id = n.Id, Title = n.Title, Check = n.Check }
+                            select new TodotaskDto 
+                            { 
+                                Id = n.Id, 
+                                Title = n.Title, 
+                                Check = n.Check 
+                            }
             }).ToList();
             
             return dto;
@@ -45,12 +41,6 @@ namespace Api.Repositories
             var fold = await _context.Foldertasks.FirstOrDefaultAsync(x => x.Id == id);
             if (fold == null) return null;
             var tasks = await _context.Todotasks.ToListAsync();
-            var tasksDto = tasks.Select(task => new TodotaskDto
-            {
-                Id = task.Id,
-                Check = task.Check,
-                Title = task.Title
-            }).ToList();
             var dto = new FoldertaskDto
             {
                 Id = fold.Id,
@@ -91,8 +81,8 @@ namespace Api.Repositories
         public async Task<FoldertaskDto?> Delete(int id)
         {
             var tasks = await _context.Todotasks.ToListAsync();
-            var tasksDeleted = tasks.Where(x => id == x.FolderId).ToList();
-            foreach (var item in tasksDeleted)
+            
+            foreach (var item in tasks.Where(x => id == x.FolderId).ToList())
             {
                 _context.Entry(item).State = EntityState.Deleted;
             }
