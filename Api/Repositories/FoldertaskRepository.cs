@@ -64,7 +64,6 @@ namespace Api.Repositories
             {
                 Id = fold.Id,
                 Name = taskDto.Name
-
             };
             return dto;
         }
@@ -86,11 +85,9 @@ namespace Api.Repositories
             {
                 _context.Entry(item).State = EntityState.Deleted;
             }
-            
             var folder = await _context.Foldertasks.FirstOrDefaultAsync(x => x.Id == id);
             if (folder == null) return null;
             _context.Entry(folder).State = EntityState.Deleted;
-
             await _context.SaveChangesAsync();
             var dto = new FoldertaskDto();
             return dto;
