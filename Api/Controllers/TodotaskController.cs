@@ -1,6 +1,7 @@
 ﻿using Api.Data;
 using Api.DTO;
 using Api.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
